@@ -1,28 +1,46 @@
-require('dotenv').config();
-const { MongoClient, ServerApiVersion } = require('mongodb');
+require("dotenv").config();
+const { MongoClient } = require("mongodb");
+const {
+  DB_NAME,
+  PHRASE_COLLECTION,
+} = require("./constant/databaseConstant.js");
 
 const uri = process.env.MONGODB_URI;
 
-// Create a MongoClient with a MongoClientOptions object to set the Stable API version
-const client = new MongoClient(uri, {
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true,
-  }
-});
-
-const run = () => {
+async function connect() {
   try {
-    // Connect the client to the server	(optional starting in v4.7)
-    client.connect();
-    // Send a ping to confirm a successful connection
-    client.db("admin").command({ ping: 1 });
-    console.log("Pinged your deployment. You successfully connected to MongoDB!");
-  } finally {
-    // Ensures that the client will close when you finish/error
-    client.close();
+    const client = await MongoClient.connect(uri);
+    console.log("Connected to the MongoDB server");
+
+    // Return the MongoDB client object
+    return client;
+  } catch (error) {
+    console.log("Failed to connect to the MongoDB server", error);
+    throw error;
   }
 }
 
-module.exports = { run };
+async function addPhrase(phrase) {
+  try {
+    //Get Connected MongoDB Client
+    const client = connect();
+
+    //Access the spesific database
+    const db = (await client).db(DB_NAME);
+
+    //Access the spesific collection where we want to add the phrase
+    const collection = db.collection(PHRASE_COLLECTION);
+
+    //Insert the phrase into the collection
+    const result = await collection.insertOne(phrase);
+    console.log("Phrase added:", result.insertedId);
+
+    //Close the connection
+    (await client).close;
+  } catch (error) {
+    console.error("Error adding entity:", error);
+    throw error;
+  }
+}
+
+module.exports = { addPhrase };

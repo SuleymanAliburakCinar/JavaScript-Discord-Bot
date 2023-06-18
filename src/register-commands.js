@@ -1,10 +1,36 @@
 require('dotenv').config();
-const { REST, Routes } = require('discord.js');
+const { REST, Routes, ApplicationCommandOptionType } = require('discord.js');
 
 const commands = [
   {
-    name: 'hey',
-    description: 'Replies with hey!',
+    name: 'add',
+    description: 'Add the phrase and its meaning to the db',
+    options: [
+      {
+        name: 'phrase',
+        description: 'Enter the phrase',
+        type: ApplicationCommandOptionType.String,
+        required: true,
+      },
+      {
+        name: 'meaning',
+        description: `Enter the phrase's meaning`,
+        type: ApplicationCommandOptionType.String,
+        required: true,
+      },
+      {
+        name: '2nd-meaning',
+        description: `Enter the additional phrase's meaning`,
+        type: ApplicationCommandOptionType.String,
+        required: false,
+      },
+      {
+        name: '3th-meaning',
+        description: `Enter the additional phrase's meaning`,
+        type: ApplicationCommandOptionType.String,
+        required: false,
+      },
+    ]
   },
 ];
 
