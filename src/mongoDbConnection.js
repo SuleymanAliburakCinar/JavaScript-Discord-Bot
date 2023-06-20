@@ -22,25 +22,34 @@ async function connect() {
 
 async function addPhrase(phrase) {
   try {
-    //Get Connected MongoDB Client
     const client = connect();
-
-    //Access the spesific database
     const db = (await client).db(DB_NAME);
-
-    //Access the spesific collection where we want to add the phrase
     const collection = db.collection(PHRASE_COLLECTION);
 
-    //Insert the phrase into the collection
     const result = await collection.insertOne(phrase);
-    console.log("Phrase added:", result.insertedId);
 
-    //Close the connection
     (await client).close;
   } catch (error) {
-    console.error("Error adding entity:", error);
+    console.error("addPhrase", error);
     throw error;
   }
 }
 
-module.exports = { addPhrase };
+async function getAllPhrases() {
+  try {
+    const client = connect();
+    const db = (await client).db(DB_NAME);
+    const collection = db.collection(PHRASE_COLLECTION);
+
+    const data = await collection.find({}).toArray();
+
+    (await client).close;
+
+    return data;
+  } catch (error) {
+    console.error("getAllPhrases", error);
+    throw error;
+  }
+}
+
+module.exports = { addPhrase, getAllPhrases };

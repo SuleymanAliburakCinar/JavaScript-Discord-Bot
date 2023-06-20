@@ -1,6 +1,6 @@
 require("dotenv").config();
 const { Client, IntentsBitField } = require("discord.js");
-const { addPhrase } = require("./mongoDbConnection.js");
+const { addPhrase, getAllPhrases } = require("./mongoDbConnection.js");
 const { isEqual } = require("./utils/stringUtils.js");
 const { addNonNullValueToArray } = require("./utils/generalUtils.js");
 const { HELLO } = require("./constant/generalConstant.js");
@@ -42,9 +42,14 @@ client.on("interactionCreate", (interaction) => {
     addNonNullValueToArray(meanings, meaning3?.value);
     const phraseEntity = createPhraseJSON(phrase, meanings);
     if (isValid(phraseEntity)) {
-      addPhrase(phraseEntity);
-      const embed = addedPhraseEmbed(phraseEntity);
-      interaction.reply({ embeds: [embed] });
+      addPhrase(phraseEntity)
+        .then(() => {
+          const embed = addedPhraseEmbed(phraseEntity);
+          interaction.reply({ embeds: [embed] });
+        })
+        .catch((err) => {
+          interaction.reply(`:warning: "${err.keyValue.phrase}" is duplicate`);
+        });
     } else interaction.reply("Invalid value");
   }
 });
