@@ -1,5 +1,5 @@
 function addNonNullValueToArray(array, value) {
-  if (value !== null && value !== undefined) {
+  if (value) {
     array.push(value);
   }
 }
