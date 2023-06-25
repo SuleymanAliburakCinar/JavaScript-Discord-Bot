@@ -1,0 +1,21 @@
+[
+  {
+    "phrase": "get ahead",
+    "meanings": [
+      "To improve one's situation; be successful."
+    ]
+  },
+  {
+    "phrase": "Get out",
+    "meanings": [
+      "To leave or escape",
+      "To become known"
+    ]
+  },
+  {
+    "phrase": "deneme",
+    "meanings": [
+      "DENEem"
+    ]
+  }
+]

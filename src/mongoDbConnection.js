@@ -41,7 +41,15 @@ async function getAllPhrases() {
     const db = (await client).db(DB_NAME);
     const collection = db.collection(PHRASE_COLLECTION);
 
-    const data = await collection.find({}).toArray();
+    const data = await collection
+      .find({})
+      .map((phr) => {
+        return {
+          phrase: phr.phrase,
+          meanings: phr.meanings,
+        };
+      })
+      .toArray();
 
     (await client).close;
 
